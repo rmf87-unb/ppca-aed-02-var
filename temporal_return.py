@@ -3,6 +3,8 @@ import plotly.express as px
 import numpy as np
 import streamlit as st
 
+from helpers import diff_df
+
 
 @st.cache_data
 def calculate(stocks_data_frames):
@@ -22,18 +24,7 @@ def calculate(stocks_data_frames):
     return_df = pd.concat([tempo_df, return_df], axis=1)
 
     # value diff
-    stocks_data_frames_on = stocks_data_frames.copy()
-    stocks_data_frames_on.dropna(inplace=True)
-    dif_df = pd.concat(
-        [stocks_data_frames_on.head(1), stocks_data_frames_on.tail(1)],
-        ignore_index=True,
-    )
-    dif_df.drop("Date", axis=1, inplace=True)
-    dif_df.rename(index={0: "first", 1: "last"}, inplace=True)
-    first = dif_df.loc["first"]
-    last = dif_df.loc["last"]
-    dif_df.loc["change"] = (last - first) / first
-    dif_df.drop(["first", "last"], axis=0, inplace=True)
+    dif_df = diff_df(stocks_data_frames)
 
     # aggregate
     # agg_df = return_df.agg(["mean", "std", "max", "min"])

@@ -9,7 +9,6 @@ from scipy import optimize
 locale.setlocale(locale.LC_ALL, "pt_BR")
 
 
-@st.cache_data
 def port_ret_dfs(stocks_data_frames):
     # portfolio
     port_df = stocks_data_frames.filter(stocks_data_frames.columns[2:])
@@ -31,6 +30,7 @@ def monte_carlo_for_sharpe(num_runs, port_size, ret_df):
     vol_arr = np.zeros(num_runs)
     sharpe_arr = np.zeros(num_runs)
     bar = stqdm(total=num_runs)
+    np.random.seed(10)
     for x in range(num_runs):
         weights = np.array(np.random.random(port_size))
         weights = weights / np.sum(weights)
@@ -43,21 +43,7 @@ def monte_carlo_for_sharpe(num_runs, port_size, ret_df):
     return sharpe_arr, all_weights, ret_arr, vol_arr
 
 
-def markowitz(
-    stocks_data_frames,
-    tab,
-    num_runs,
-):
-    port_df, ret_df = port_ret_dfs(stocks_data_frames)
-
-    sharpe, weights, ret_arr, vol_arr = monte_carlo_for_sharpe(
-        num_runs, len(port_df.columns[1:]), ret_df
-    )
-
-    best_position = weights[sharpe.argmax(), :]
-
-    # frontier
-
+def frontier(ret_df, frontier_supports):
     def get_ret_vol_sharpe(weights):
         weights = np.array(weights)
         ret = np.sum(ret_df.mean() * weights)
@@ -71,7 +57,7 @@ def markowitz(
     def minimize_volatility(weights):
         return get_ret_vol_sharpe(weights)[1]
 
-    frontier_y = np.linspace(0.000, 0.0010, 100)
+    frontier_y = np.linspace(0.000, 0.0010, frontier_supports)
     frontier_x = []
 
     cons = {"type": "eq", "fun": check_sum}
@@ -93,6 +79,20 @@ def markowitz(
         frontier_x.append(result["fun"])
         bar2.update(1)
 
+    return frontier_x, frontier_y
+
+
+def markowitz(stocks_data_frames, tab, num_runs, frontier_supports):
+    port_df, ret_df = port_ret_dfs(stocks_data_frames)
+
+    sharpe, weights, ret_arr, vol_arr = monte_carlo_for_sharpe(
+        num_runs, len(port_df.columns[1:]), ret_df
+    )
+
+    best_position = weights[sharpe.argmax(), :]
+
+    # frontier
+    frontier_x, frontier_y = frontier(ret_df, frontier_supports)
     # report
 
     weights_df = pd.DataFrame(columns=stocks_data_frames.columns[2:])
