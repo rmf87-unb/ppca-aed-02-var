@@ -6,7 +6,7 @@ def temporal_value(stocks_data_frames, tab):
         "iBovespa teve uma alta no período de cerca de 20 mil pontos.",
         "Quanto ao PagSeguro, percebe-se que a ação está lateralizada desde 2023.",
         "Bradesco também encontra-se lateralizado, ou seja, no mesmo patamar.",
-        "Vale teve uma queda acumulada de quase 50% desde janeiro de 2023.",
+        "A Cyrela teve uma grande alta de quase 80% desde janeiro de 2023.",
         "Ambev também praticamente lateralizada, dentro de 10% de variação.",
         "A Gol sofreu uma quebra e está em abaixo 1/12 do seu valor máximo no período.",
     ]

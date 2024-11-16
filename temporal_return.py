@@ -88,7 +88,7 @@ def temporal_return(stocks_data_frames, tab):
 
     tab.markdown(
         """
-       Quanto à correlação entre os ativos, em geral, foi abaixo de 0,3 entre si e abaixo de 0,6 em relação ao índice.
+       Quanto à correlação entre os ativos, em geral, foi abaixo de 0,35 entre si e abaixo de 0,7 em relação ao índice.
         """
     )
 

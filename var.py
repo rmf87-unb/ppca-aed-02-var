@@ -15,7 +15,7 @@ st.markdown(
     Partimos do iBovespa a do seguinte portfólio de ações, sobre as quais se analisa, inicialmente, a evolução de preço e de retorno de janeiro de 2023 a outubro de 2024:
     - PagSeguro Digital Ltd.
     - Banco Bradesco S.A.
-    - Vale S.A.
+    - Cyrela Brazil Realty S.A. Empreendimentos e Participações
     - Ambev S.A
     - Gol Linhas Aéreas Inteligentes S.A.
     
@@ -31,11 +31,11 @@ titles = [
     "iBovespa",
     "PagSeguro Digital Ltd.",
     "Banco Bradesco S.A.",
-    "Vale S.A.",
+    "Cyrela Brazil Realty S.A. Empreendimentos e Participações",
     "Ambev S.A.",
     "Gol Linhas Aéreas Inteligentes S.A. ",
 ]
-tickers = ["^BVSP", "PAGS", "BBDC4.SA", "VALE3.SA", "ABEV3.SA", "GOLL4.SA"]
+tickers = ["^BVSP", "PAGS", "BBDC4.SA", "CYRE3.SA", "ABEV3.SA", "GOLL4.SA"]
 stocks_data_frames = pd.DataFrame()
 start = "2023-01-01"
 end = "2024-10-31"
