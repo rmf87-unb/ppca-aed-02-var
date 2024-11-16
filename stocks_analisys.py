@@ -62,7 +62,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
         "Análise Temporal Valor",
         "Análise Temporal Retorno",
         "Fronteira de Markowitz",
-        "Patrimônio para 35k",
+        "Evolução e Retorno",
         "Value at Risk",
     ]
 )

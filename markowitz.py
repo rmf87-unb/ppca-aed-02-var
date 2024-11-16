@@ -1,12 +1,8 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-from stqdm import stqdm
 import matplotlib.pyplot as plt
-import locale
 from scipy import optimize
-
-locale.setlocale(locale.LC_ALL, "pt_BR")
 
 
 def port_ret_dfs(stocks_data_frames):
@@ -24,12 +20,12 @@ def port_ret_dfs(stocks_data_frames):
     return port_df, ret_df
 
 
+@st.cache_data(persist=True)
 def monte_carlo_for_sharpe(num_runs, port_size, ret_df):
     all_weights = np.zeros((num_runs, port_size))
     ret_arr = np.zeros(num_runs)
     vol_arr = np.zeros(num_runs)
     sharpe_arr = np.zeros(num_runs)
-    bar = stqdm(total=num_runs)
     np.random.seed(10)
     for x in range(num_runs):
         weights = np.array(np.random.random(port_size))
@@ -38,11 +34,11 @@ def monte_carlo_for_sharpe(num_runs, port_size, ret_df):
         ret_arr[x] = np.sum((ret_df.mean() * weights))
         vol_arr[x] = np.sqrt(np.dot(weights.T, np.dot(ret_df.cov(), weights)))
         sharpe_arr[x] = ret_arr[x] / vol_arr[x]
-        bar.update(1)
 
     return sharpe_arr, all_weights, ret_arr, vol_arr
 
 
+@st.cache_data(persist=True)
 def frontier(ret_df, frontier_supports):
     def get_ret_vol_sharpe(weights):
         weights = np.array(weights)
@@ -57,13 +53,12 @@ def frontier(ret_df, frontier_supports):
     def minimize_volatility(weights):
         return get_ret_vol_sharpe(weights)[1]
 
-    frontier_y = np.linspace(0.000, 0.0010, frontier_supports)
+    frontier_y = np.linspace(0.000, 0.0015, frontier_supports)
     frontier_x = []
 
     cons = {"type": "eq", "fun": check_sum}
     bounds = ((0, 1), (0, 1), (0, 1), (0, 1), (0, 1))
     init_guess = ((0.2), (0.2), (0.2), (0.2), (0.2))
-    bar2 = stqdm(total=len(frontier_y))
     for possible_return in frontier_y:
         cons = (
             {"type": "eq", "fun": check_sum},
@@ -77,7 +72,6 @@ def frontier(ret_df, frontier_supports):
             constraints=cons,
         )
         frontier_x.append(result["fun"])
-        bar2.update(1)
 
     return frontier_x, frontier_y
 

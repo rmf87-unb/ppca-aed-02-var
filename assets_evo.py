@@ -1,7 +1,6 @@
 import pandas as pd
 import plotly.express as px
 import numpy as np
-import streamlit as st
 
 from helpers import diff_df
 
@@ -46,13 +45,14 @@ def assets_evo(stocks_data_frames, best_position, invested_value, tab):
     tab.plotly_chart(fig)
 
     # evolution
+    assets_df.drop("return", axis=1, inplace=True)
     fig2 = px.line(title="Evolução do Patrimônio")
     for col in assets_df.columns[1:]:
         fig2.add_scatter(x=assets_df["Date"], y=assets_df[col], name=col)
 
     tab.markdown(
         f"""
-        Evolução do patrimônio para a carteira de melhor Sharp:
+        Evolução do patrimônio para a carteira de melhor Sharp a partir de um investimento de R$ 35.000,00:
         """
     )
     tab.plotly_chart(fig2)
@@ -63,7 +63,7 @@ def assets_evo(stocks_data_frames, best_position, invested_value, tab):
     )
 
     # versus BVSP
-    assets_df.drop("return", axis=1, inplace=True)
+
     dif_df = diff_df(assets_df)
     dif_df["^BVSP"] = diff_df(stocks_data_frames).filter(["^BVSP"], axis=1)
     dif_df.rename(
