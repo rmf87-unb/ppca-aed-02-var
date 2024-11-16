@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 
 
-@st.cache_data
 def diff_df(df):
     # value diff
     diff_df = df.copy()

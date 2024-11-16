@@ -6,7 +6,6 @@ import streamlit as st
 from helpers import diff_df
 
 
-@st.cache_data
 def calculate(stocks_data_frames):
     # return
     return_df = pd.DataFrame()

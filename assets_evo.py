@@ -6,7 +6,6 @@ import streamlit as st
 from helpers import diff_df
 
 
-@st.cache_data
 def evo(stocks_data_frames, best_position, invested_value):
     # values
     tempo_df = stocks_data_frames.filter(["Date"], axis=1)
@@ -20,6 +19,8 @@ def evo(stocks_data_frames, best_position, invested_value):
     shares = investment / values_df.iloc[0]
     assets_df = shares * values_df
     assets_df["Total"] = assets_df[assets_df.columns].sum(axis=1)
+    assets_df["return"] = 0.0
+    assets_df["return"] = np.log(assets_df["Total"] / assets_df["Total"].shift(1)) * 100
     assets_df = pd.concat([tempo_df, assets_df], axis=1)
 
     return assets_df
@@ -27,9 +28,42 @@ def evo(stocks_data_frames, best_position, invested_value):
 
 def assets_evo(stocks_data_frames, best_position, invested_value, tab):
     assets_df = evo(stocks_data_frames, best_position, invested_value)
-    fig = px.line(title="Evolução do Patrimônio")
+
+    tab.markdown(
+        f"""
+        Retorno diário para a carteira selecionada:
+        """
+    )
+    # return
+    fig = px.scatter(
+        assets_df,
+        x=assets_df["Date"],
+        y=assets_df["return"],
+        trendline="ols",
+        trendline_color_override="grey",
+        title="Histórico de Retorno (t=1) da Carteira Selecionada",
+    )
+    tab.plotly_chart(fig)
+
+    # evolution
+    fig2 = px.line(title="Evolução do Patrimônio")
     for col in assets_df.columns[1:]:
-        fig.add_scatter(x=assets_df["Date"], y=assets_df[col], name=col)
+        fig2.add_scatter(x=assets_df["Date"], y=assets_df[col], name=col)
+
+    tab.markdown(
+        f"""
+        Evolução do patrimônio para a carteira de melhor Sharp:
+        """
+    )
+    tab.plotly_chart(fig2)
+    tab.markdown(
+        f"""
+        Ao final do período, a evolução do patrimônio pode ser comparada ao o índice Bovespa:
+        """
+    )
+
+    # versus BVSP
+    assets_df.drop("return", axis=1, inplace=True)
     dif_df = diff_df(assets_df)
     dif_df["^BVSP"] = diff_df(stocks_data_frames).filter(["^BVSP"], axis=1)
     dif_df.rename(
@@ -37,17 +71,5 @@ def assets_evo(stocks_data_frames, best_position, invested_value, tab):
             "change": "val. Δ%",
         },
         inplace=True,
-    )
-
-    tab.markdown(
-        f"""
-        Evolução do patrimônio para a carteira de melhor Sharp:
-        """
-    )
-    tab.plotly_chart(fig)
-    tab.markdown(
-        f"""
-        Ao final do período, a evolução do patrimônio pode ser comparada ao o índice Bovespa:
-        """
     )
     tab.dataframe(dif_df)
