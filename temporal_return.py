@@ -73,7 +73,7 @@ def temporal_return(stocks_data_frames, tab):
 
         Apesar de haver diferenças significativas nos desvios padrão, não é possível associá-los ao retorno no período. 
     
-        O que o std parece evidenciar é que as mudanças patamar nos preços parecem ocorrer em outliers de retorno, seja para mais ou para menos, ou seja, em dias específicos.
+        Em geral, o que o std parece evidenciar, quando contraposto à média próxima de zero do retorno, é que as mudanças de patamar nos preços parecem ocorrer em outliers, seja para mais ou para menos. Em outras palavras, há dias de grandes ganhos e de grandes perdas.
         """
     )
 
