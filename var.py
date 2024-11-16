@@ -19,7 +19,11 @@ st.markdown(
     - Ambev S.A
     - Gol Linhas Aéreas Inteligentes S.A.
     
-    Em seguida, por uma simulação de Monte Carlo, estimou-se a fronteira eficiente de Markowitz.
+    Em seguida, por uma simulação de Monte Carlo, estimou-se a fronteira eficiente de Markowitz. Nesta simulação, escolheu-se a carteira com melhor índice de Sharpe (razão retorno/volatilidade).
+
+    Para a melhor carteira, seguiu-se com uma análise de ROI para um investimento inicial de R$ 35.000,00.
+
+    Por fim, foi feita outra simulação de Monte Carlo para se determinar o Value at Risk desta posição.
     """
 )
 
@@ -51,10 +55,16 @@ def load_stocks(stocks, stocks_data_frames, start, end):
 
 load_stocks(tickers, stocks_data_frames, start, end)
 
-tab1, tab2, tab3 = st.tabs(
-    ["Análise Temporal Valor", "Análise Temporal Retorno", "Fronteira de Markowitz"]
+tab1, tab2, tab3, tab4, tab5 = st.tabs(
+    [
+        "Análise Temporal Valor",
+        "Análise Temporal Retorno",
+        "Fronteira de Markowitz",
+        "ROI para 35k",
+        "Value at Risk",
+    ]
 )
 
 temporal_value(stocks_data_frames, tab1)
 temporal_return(stocks_data_frames, tab2)
-markowitz(stocks_data_frames, tab3, 50000)
+best_position = markowitz(stocks_data_frames, tab3, 50000)

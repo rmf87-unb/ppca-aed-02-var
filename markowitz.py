@@ -54,8 +54,9 @@ def markowitz(
         num_runs, len(port_df.columns[1:]), ret_df
     )
 
+    best_position = weights[sharpe.argmax(), :]
     weights_df = pd.DataFrame(columns=stocks_data_frames.columns[2:])
-    weights_df.loc["best weights"] = weights[sharpe.argmax(), :]
+    weights_df.loc["best weights"] = best_position
 
     tab.markdown(
         f"""
@@ -73,9 +74,11 @@ def markowitz(
     )
 
     fig = plt.figure(figsize=(12, 8))
-    plt.scatter(vol_arr, ret_arr, c=sharpe, cmap="viridis")
+    plt.scatter(vol_arr, ret_arr, c=sharpe)
     plt.colorbar(label="Sharpe Ratio")
     plt.xlabel("Volatilidade")
     plt.ylabel("Retorno")
     plt.scatter(vol_arr[sharpe.argmax()], ret_arr[sharpe.argmax()], c="red", s=200)
-    st.pyplot(fig)
+    tab.pyplot(fig)
+
+    return best_position

@@ -1,10 +1,11 @@
 import pandas as pd
 import plotly.express as px
 import numpy as np
+import streamlit as st
 
 
-def temporal_return(stocks_data_frames, tab):
-
+@st.cache_data
+def calculate(stocks_data_frames):
     # return
     return_df = pd.DataFrame()
     tempo_df = stocks_data_frames.filter(["Date"], axis=1)
@@ -19,17 +20,6 @@ def temporal_return(stocks_data_frames, tab):
     correlation = np.round(correlation, 2)
 
     return_df = pd.concat([tempo_df, return_df], axis=1)
-
-    fig = px.scatter(
-        return_df,
-        x=return_df["Date"],
-        y=stocks_data_frames.columns[1:],
-        trendline="ols",
-        trendline_color_override="grey",
-        title="Histórico de Retorno (t=1) das Ações",
-    )
-
-    tab.plotly_chart(fig)
 
     # value diff
     stocks_data_frames_on = stocks_data_frames.copy()
@@ -64,6 +54,23 @@ def temporal_return(stocks_data_frames, tab):
         },
         inplace=True,
     )
+
+    return return_df, summary_df, correlation
+
+
+def temporal_return(stocks_data_frames, tab):
+    return_df, summary_df, correlation = calculate(stocks_data_frames)
+    # report
+    fig = px.scatter(
+        return_df,
+        x=return_df["Date"],
+        y=stocks_data_frames.columns[1:],
+        trendline="ols",
+        trendline_color_override="grey",
+        title="Histórico de Retorno (t=1) das Ações",
+    )
+
+    tab.plotly_chart(fig)
 
     tab.markdown("""O retorno foi calculado como:""")
     tab.latex(r"""E[R_i] = \log\left(\frac{P_t}{P_{t-1}}\right)""")
