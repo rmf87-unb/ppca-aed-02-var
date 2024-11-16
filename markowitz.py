@@ -25,13 +25,11 @@ def port_ret_dfs(stocks_data_frames):
     return port_df, ret_df
 
 
-def monte_carlo_for_sharpe(num_runs, port_size, ret_df):
+def monte_carlo_for_sharpe(num_runs, port_size, ret_df, bar):
     all_weights = np.zeros((num_runs, port_size))
     ret_arr = np.zeros(num_runs)
     vol_arr = np.zeros(num_runs)
     sharpe_arr = np.zeros(num_runs)
-    bar = stqdm(total=num_runs)
-
     for x in range(num_runs):
         weights = np.array(np.random.random(port_size))
         weights = weights / np.sum(weights)
@@ -50,8 +48,9 @@ def markowitz(
     num_runs,
 ):
     port_df, ret_df = port_ret_dfs(stocks_data_frames)
+    bar = stqdm(total=num_runs)
     sharpe, weights, ret_arr, vol_arr = monte_carlo_for_sharpe(
-        num_runs, len(port_df.columns[1:]), ret_df
+        num_runs, len(port_df.columns[1:]), ret_df, bar
     )
 
     best_position = weights[sharpe.argmax(), :]
