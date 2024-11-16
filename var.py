@@ -3,8 +3,8 @@ import yfinance as yf
 import streamlit as st
 
 
-from temporal_retorno import temporal_retorno
-from temporal_valor import temporal_valor
+from temporal_return import temporal_return
+from temporal_value import temporal_value
 
 
 st.title("Análise de Portfólio de Ações")
@@ -54,5 +54,5 @@ tab1, tab2, tab3 = st.tabs(
     ["Análise Temporal Valor", "Análise Temporal Retorno", "Fronteira de Markowitz"]
 )
 
-temporal_valor(stocks_data_frames, tab1)
-temporal_retorno(stocks_data_frames, tab2)
+temporal_value(stocks_data_frames, tab1)
+temporal_return(stocks_data_frames, tab2)

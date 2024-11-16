@@ -3,20 +3,26 @@ import plotly.express as px
 import numpy as np
 
 
-def temporal_retorno(stocks_data_frames, tab):
+def temporal_return(stocks_data_frames, tab):
 
-    retorno_df = pd.DataFrame()
+    # return
+    return_df = pd.DataFrame()
     tempo_df = stocks_data_frames.filter(["Date"], axis=1)
     tempo_df = tempo_df.apply(
         lambda x: pd.to_datetime(x, errors="coerce", format="%Y-%m-%d")
     )
     partial_df = stocks_data_frames.filter(stocks_data_frames.columns[1:], axis=1)
-    retorno_df = np.log(partial_df / partial_df.shift(1))
-    retorno_df = pd.concat([tempo_df, retorno_df], axis=1)
+    return_df = np.log(partial_df / partial_df.shift(1))
+
+    # correlation
+    correlation = return_df.corr()
+    correlation = np.round(correlation, 2)
+
+    return_df = pd.concat([tempo_df, return_df], axis=1)
 
     fig = px.scatter(
-        retorno_df,
-        x=retorno_df["Date"],
+        return_df,
+        x=return_df["Date"],
         y=stocks_data_frames.columns[1:],
         trendline="ols",
         trendline_color_override="grey",
@@ -40,8 +46,8 @@ def temporal_retorno(stocks_data_frames, tab):
     dif_df.drop(["first", "last"], axis=0, inplace=True)
 
     # aggregate
-    # agg_df = retorno_df.agg(["mean", "std", "max", "min"])
-    agg_df = retorno_df.agg(["std"])
+    # agg_df = return_df.agg(["mean", "std", "max", "min"])
+    agg_df = return_df.agg(["std"])
     agg_df.drop("Date", axis=1, inplace=True)
 
     # summary
@@ -63,7 +69,7 @@ def temporal_retorno(stocks_data_frames, tab):
     tab.latex(r"""E[R_i] = \log\left(\frac{P_t}{P_{t-1}}\right)""")
     tab.markdown(
         """
-        Pode-se observar que os gráficos de dispersão dos retornos para o período de 1 dia apresentam linhas tendências (mínimos quadrados ordinários) muito próximas de zero no período observado.
+        Pode-se observar que os gráficos de dispersão dos retorno para o período de 1 dia apresentam linhas tendências (mínimos quadrados ordinários) muito próximas de zero no período observado.
 
         Apesar de haver diferenças significativas nos desvios padrão, não é possível associá-los ao retorno no período. 
     
@@ -72,3 +78,11 @@ def temporal_retorno(stocks_data_frames, tab):
     )
 
     tab.dataframe(summary_df)
+
+    tab.markdown(
+        """
+       Quanto à correlação entre os ativos, em geral, foi abaixo de 0,3 entre si e abaixo de 0,6 em relação ao índice.
+        """
+    )
+
+    tab.dataframe(correlation)

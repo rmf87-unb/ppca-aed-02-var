@@ -1,7 +1,7 @@
 import plotly.express as px
 
 
-def temporal_valor(stocks_data_frames, tab):
+def temporal_value(stocks_data_frames, tab):
     analysis = [
         "iBovespa teve uma alta no período de cerca de 20 mil pontos.",
         "Quanto ao PagSeguro, percebe-se que a ação está lateralizada desde 2023.",
