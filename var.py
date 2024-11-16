@@ -5,6 +5,7 @@ import streamlit as st
 
 from temporal_return import temporal_return
 from temporal_value import temporal_value
+from markowitz import markowitz
 
 
 st.title("Análise de Portfólio de Ações")
@@ -56,3 +57,4 @@ tab1, tab2, tab3 = st.tabs(
 
 temporal_value(stocks_data_frames, tab1)
 temporal_return(stocks_data_frames, tab2)
+markowitz(stocks_data_frames, tab3, 50000)

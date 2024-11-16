@@ -9,6 +9,8 @@ yfinance = "*"
 streamlit = "*"
 "plotly.express" = "*"
 numpy = "*"
+stqdm = "*"
+matplotlib = "*"
 
 [dev-packages]
 

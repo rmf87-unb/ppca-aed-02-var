@@ -2,14 +2,23 @@
   "cSpell.words": [
     "ABEV",
     "Ambev",
+    "argmax",
     "BBDC",
     "BVSP",
+    "carlo",
+    "colorbar",
     "dataframe",
     "GOLL",
+    "markowitz",
+    "morkowitz",
     "PAGS",
     "plotly",
+    "sharpe",
+    "stqdm",
     "streamlit",
     "trendline",
-    "yfinance"
+    "xlabel",
+    "yfinance",
+    "ylabel"
   ]
 }
