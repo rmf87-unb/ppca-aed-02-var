@@ -11,6 +11,7 @@ streamlit = "*"
 numpy = "*"
 stqdm = "*"
 matplotlib = "*"
+scipy = "*"
 
 [dev-packages]
 

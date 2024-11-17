@@ -28,6 +28,7 @@ def evo(stocks_data_frames, best_position, invested_value):
 def assets_evo(stocks_data_frames, best_position, invested_value, tab):
     assets_df = evo(stocks_data_frames, best_position, invested_value)
 
+    assets_df_o = pd.DataFrame(assets_df)
     tab.markdown(
         f"""
         Retorno diário para a carteira selecionada:
@@ -73,3 +74,5 @@ def assets_evo(stocks_data_frames, best_position, invested_value, tab):
         inplace=True,
     )
     tab.dataframe(dif_df)
+
+    return assets_df_o

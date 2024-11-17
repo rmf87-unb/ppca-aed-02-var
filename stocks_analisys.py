@@ -7,6 +7,7 @@ from assets_evo import assets_evo
 from temporal_return import temporal_return
 from temporal_value import temporal_value
 from markowitz import markowitz
+from value_at_risk import value_at_risk
 
 
 st.title("Análise de Portfólio de Ações")
@@ -69,5 +70,8 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
 
 temporal_value(stocks_data_frames, tab1)
 temporal_return(stocks_data_frames, tab2)
-best_position = markowitz(stocks_data_frames, tab3, 50000, 100)
-assets_evo(stocks_data_frames, best_position, 35000, tab4)
+best_position, max_sharpe_vol, max_sharpe_ret = markowitz(
+    stocks_data_frames, tab3, 50000, 100
+)
+assets_df = assets_evo(stocks_data_frames, best_position, 35000, tab4)
+value_at_risk(assets_df, 0.9, max_sharpe_vol, max_sharpe_ret, tab5)

@@ -106,13 +106,16 @@ def markowitz(stocks_data_frames, tab, num_runs, frontier_supports):
         """
     )
 
+    max_sharpe_vol = vol_arr[sharpe.argmax()]
+    max_sharpe_ret = ret_arr[sharpe.argmax()]
+
     fig = plt.figure(figsize=(12, 8))
     plt.scatter(vol_arr, ret_arr, c=sharpe)
     plt.colorbar(label="Sharpe Ratio")
     plt.xlabel("Volatilidade")
     plt.ylabel("Retorno")
-    plt.scatter(vol_arr[sharpe.argmax()], ret_arr[sharpe.argmax()], c="red", s=200)
+    plt.scatter(max_sharpe_vol, max_sharpe_ret, c="red", s=200)
     plt.plot(frontier_x, frontier_y, "b--", linewidth=3)
     tab.pyplot(fig)
 
-    return best_position
+    return best_position, max_sharpe_vol, max_sharpe_ret
